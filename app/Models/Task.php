@@ -10,7 +10,7 @@ class Task extends Model
 {
     use SoftDeletes,HasFactory;
 
-    protected $guarded=['*'];
+    protected $fillable=['title','description','user_id'];
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }

@@ -10,17 +10,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1 class="font-2xl text-purple-800">Bienvenido a tus tareas</h1>
-                    @foreach($tasks as $task)
-                        <p class="mt-4 text-log text-purple-600">
-                            {{$task->title}}
 
-
-                        </p>
-                        <p class="mt-4 text-log text-red-600">
-                        {{$task->description}}
-                        </p>
-
-                    @endforeach
+                    @livewire('task-component',compact('tasks'))
 
                 </div>
             </div>
