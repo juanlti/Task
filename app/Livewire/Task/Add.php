@@ -22,7 +22,7 @@ class Add extends Component
         // Validar el título y la descripción
         $this->validate([
             'title' => 'required|string|min:5|max:255',
-            'description' => 'required|string|min:15|max:255',
+            'description' => 'required|string|min:10|max:255',
         ]);
 
         // Crear la tarea

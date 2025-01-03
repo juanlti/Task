@@ -30,4 +30,18 @@
             </div>
         </div>
     @endif
+        @if ($successModal)
+            <!-- Modal de éxito -->
+            <div class="fixed inset-0 z-10 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                    <h2 class="text-lg font-semibold mb-4">Tarea ID  {{$taskId}} editada</h2>
+                    <p>La tarea se ha creado correctamente.</p>
+                    <div class="mt-6 flex justify-end">
+                        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                                wire:click="$set('successModal',false)">Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @endif
 </div>

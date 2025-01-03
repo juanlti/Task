@@ -12,7 +12,8 @@ class Edit extends Component
     public $modal = false;
     public $title = '';
     public $description = '';
-    public $taskId;
+    public $taskId=-1;
+    public $successModal=false;
     protected $listeners = ['editTask' => 'loadTask'];
 
     public function loadTask( $taskId)
@@ -42,6 +43,8 @@ class Edit extends Component
         // Resetear los campos
         $this->reset(['taskId', 'title', 'description']);
         $this->modal = false;
+        $this->successModal = true;
+
         $this->dispatch('taskUpdated');
     }
 
