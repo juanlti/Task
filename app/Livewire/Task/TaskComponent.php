@@ -11,14 +11,15 @@ class TaskComponent extends Component
     public $title;
     public $description;
     public $modal = false;
-
-    protected $listeners = ['taskUpdated' => 'loadTasks', 'editTask' => 'loadTasks', 'taskAdded' => 'loadTasks'];
+    protected $listeners = ['taskUpdated' => 'loadTasks', 'taskAdded' => 'loadTasks'];
 
     public function mount()
     {
         $this->loadTasks();
     }
-    public function addTask(){
+
+    public function addTask()
+    {
 
         $this->dispatch('createTask');
 
@@ -30,6 +31,7 @@ class TaskComponent extends Component
             ->orderBy('created_at', 'desc')
             ->get();
     }
+
     public function render()
     {
         return view('livewire.task.component');
@@ -37,13 +39,12 @@ class TaskComponent extends Component
 
     public function confirmDelete($taskId)
     {
-        //$this->emit('task.delete', 'confirmDelete', $taskId);
         $this->dispatch('confirmDelete', $taskId);
     }
 
 
-    public function editTask($task_id)
+    public function editTask($taskId)
     {
-        $this->emitTo('task.edit', 'mount', $task_id);
+        $this->dispatch('editTask', $taskId);
     }
 }

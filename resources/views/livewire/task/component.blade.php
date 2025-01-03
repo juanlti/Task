@@ -36,7 +36,7 @@
                             <td class="px-5 py-5 text-sm">
                                 <!-- Botón para Editar -->
                                 <button class="bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-400"
-                                        wire:click.prevent="$emit('editTask', {{ $task->id }})">
+                                        wire:click.prevent="editTask({{ $task->id}})">
                                     Editar
                                 </button>
                                 <!-- Botón para Eliminar con Confirmación -->
@@ -55,9 +55,10 @@
     </div>
 
     <!-- Modales -->
-
     <!-- Incluir el componente Add -->
     <livewire:task.add/>
     <!-- Incluir el componente Delete -->
     <livewire:task.delete />
+    <!-- Incluir el componente Edit -->
+    <livewire:task.edit />
 </div>

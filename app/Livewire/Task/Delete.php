@@ -22,8 +22,6 @@ class Delete extends Component
     {
         if ($this->taskId) {
             Task::find($this->taskId)?->delete();
-            //$this->emitTo('task.TaskComponent', 'taskUpdated'); // Notifica al TaskComponent que actualice la lista
-            //$this->emit('taskUpdated'); // Notifica al TaskComponent que actualice la lista
             $this->dispatch('taskUpdated');
             $this->closeModal(); // Cierra el modal
         }
