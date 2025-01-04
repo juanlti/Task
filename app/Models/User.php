@@ -56,6 +56,6 @@ class User extends Authenticatable
     }
     // relacion inversa de los usuarios que comparten tareas
     public function sharedTasks(): BelongsToMany{
-        return $this->belongsToMany(Task::class,'task_user','user_id','task_id')->withPivot('permission');
+        return $this->belongsToMany(Task::class,'task_user')->withPivot('permission');
     }
 }

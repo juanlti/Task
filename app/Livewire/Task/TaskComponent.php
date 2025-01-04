@@ -8,6 +8,7 @@ use Livewire\Component;
 class TaskComponent extends Component
 {
     public $tasks;
+
     public $title;
     public $description;
     public $modal = false;
@@ -25,6 +26,7 @@ class TaskComponent extends Component
 
     }
 
+
     public function loadTasks()
     {
 
@@ -32,6 +34,8 @@ class TaskComponent extends Component
         $myTask = $user->tasks;
         $sharedTask = $user->sharedTasks;
         $this->tasks = $myTask->merge($sharedTask);
+        //dd($sharedTask->toArray());
+        //  {{$task->permission}}
 
 
     }

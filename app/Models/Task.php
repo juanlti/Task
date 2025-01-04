@@ -17,6 +17,6 @@ class Task extends Model
     }
     // una tarea compartida con muchos usuarios
     public function sharedWith():BelongsToMany{
-        return $this->belongsToMany(User::class,'task_user','task_id','user_id')->withPivot('permission');
+        return $this->belongsToMany(User::class,'task_user')->withPivot('permission');
     }
 }

@@ -1,5 +1,5 @@
 <!-- resources/views/livewire/task/component.blade.php -->
-<div>
+<div wire:poll="loadTasks">
     <div class="mx-auto max-w-screen-lg px-4 py-8 sm:px-8">
         <div class="flex items-center justify-between pb-6">
             <div>
@@ -34,18 +34,29 @@
                                 <p class="whitespace-no-wrap">{{$task->description}}</p>
                             </td>
                             <td class="px-5 py-5 text-sm">
+
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Completada
+                                    </span>
                                 <!-- Botón para Editar -->
-                                <button class="bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-400"
-                                        wire:click.prevent="editTask({{ $task->id}})">
-                                    Editar
-                                </button>
-                                <!-- Botón para Eliminar con Confirmación -->
-                                <button class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400"
-                                        wire:click.prevent="confirmDelete({{ $task->id }})">
-                                    Eliminar
-                                </button>
+                                {{$task->pivot}}
+
+                                @if ( (isset($task->pivot) && $task->pivot->permission == 'edit') || auth()->user()->id == $task->user_id)
+                                    <button class="bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-400"
+                                            wire:click.prevent="editTask({{ $task->id}})">
+                                        Editar
+                                    </button>
+                                    <!-- Botón para Eliminar con Confirmación -->
+                                    <button class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400"
+                                            wire:click.prevent="confirmDelete({{ $task->id }})">
+                                        Eliminar
+                                    </button>
+                                @endif
+
                             </td>
                         </tr>
+
                     @endforeach
                     </tbody>
                 </table>
@@ -54,11 +65,12 @@
         </div>
     </div>
 
+
     <!-- Modales -->
     <!-- Incluir el componente Add -->
     <livewire:task.add/>
     <!-- Incluir el componente Delete -->
-    <livewire:task.delete />
+    <livewire:task.delete/>
     <!-- Incluir el componente Edit -->
-    <livewire:task.edit />
+    <livewire:task.edit/>
 </div>
