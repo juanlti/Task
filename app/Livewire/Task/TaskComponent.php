@@ -32,12 +32,7 @@ class TaskComponent extends Component
         $myTask = $user->tasks;
         $sharedTask = $user->sharedTasks;
         $this->tasks = $myTask->merge($sharedTask);
-        /*
-        $this->tasks = Task::where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-    }
-        */
+
 
     }
     public function render()
