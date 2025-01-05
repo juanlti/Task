@@ -10,6 +10,7 @@ class TaskComponent extends Component
     public $tasks;
 
     public $title;
+
     public $description;
     public $modal = false;
     protected $listeners = ['taskUpdated' => 'loadTasks', 'taskAdded' => 'loadTasks'];
@@ -26,7 +27,6 @@ class TaskComponent extends Component
 
     }
 
-
     public function loadTasks()
     {
 
@@ -34,11 +34,8 @@ class TaskComponent extends Component
         $myTask = $user->tasks;
         $sharedTask = $user->sharedTasks;
         $this->tasks = $myTask->merge($sharedTask);
-        //dd($sharedTask->toArray());
-        //  {{$task->permission}}
-
-
     }
+
     public function render()
     {
         return view('livewire.task.component');
@@ -54,4 +51,11 @@ class TaskComponent extends Component
     {
         $this->dispatch('editTask', $taskId);
     }
+
+    public function sharedTask($taskId)
+    {
+
+        $this->dispatch('shareTask', $taskId);
+    }
+
 }

@@ -34,25 +34,28 @@
                                 <p class="whitespace-no-wrap">{{$task->description}}</p>
                             </td>
                             <td class="px-5 py-5 text-sm">
-
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Completada
-                                    </span>
                                 <!-- Botón para Editar -->
-                                {{$task->pivot}}
-
-                                @if ( (isset($task->pivot) && $task->pivot->permission == 'edit') || auth()->user()->id == $task->user_id)
-                                    <button class="bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-400"
+                                <!-- {{$task->pivot}} -->
+                                <div class="flex flex-row justify-between">
+                                    @if ( (isset($task->pivot) && $task->pivot->permission == 'edit') || auth()->user()->id == $task->user_id)
+                                        <button
+                                            class="bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-400"
                                             wire:click.prevent="editTask({{ $task->id}})">
-                                        Editar
-                                    </button>
-                                    <!-- Botón para Eliminar con Confirmación -->
-                                    <button class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400"
-                                            wire:click.prevent="confirmDelete({{ $task->id }})">
-                                        Eliminar
-                                    </button>
-                                @endif
+                                            Editar
+                                        </button>
+                                        <button
+                                            class="bg-yellow-800 text-white px-4 py-2 rounded-md hover:bg-yellow-400"
+                                            wire:click.prevent="sharedTask({{$task->id}})">
+                                            Compartir
+                                        </button>
+                                        <!-- Botón para Eliminar con Confirmación -->
+                                        <button class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400"
+                                                wire:click.prevent="confirmDelete({{ $task->id }})">
+                                            Eliminar
+                                        </button>
+
+                                    @endif
+                                </div>
 
                             </td>
                         </tr>
@@ -73,4 +76,8 @@
     <livewire:task.delete/>
     <!-- Incluir el componente Edit -->
     <livewire:task.edit/>
+    <!-- Incluir el componente Share -->
+    <livewire:task.share/>
+
+
 </div>
