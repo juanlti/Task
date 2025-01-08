@@ -11,7 +11,7 @@ class Task extends Model
 {
     use SoftDeletes,HasFactory;
 
-    protected $fillable=['title','description','user_id'];
+    protected $fillable=['title','description','user_id','is_completed'];
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }

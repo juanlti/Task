@@ -57,5 +57,17 @@ class TaskComponent extends Component
 
         $this->dispatch('shareTask', $taskId);
     }
+    public function markAsCompleted($taskId)
+    {
+        $task = Task::find($taskId);
+        if ($task) {
+            $task->is_completed = true;
+            $task->save();
+            session()->flash('success', 'La tarea ha sido marcada como completada.');
+        } else {
+            session()->flash('error', 'La tarea no pudo ser encontrada.');
+        }
+    }
+
 
 }
