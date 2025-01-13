@@ -2,20 +2,20 @@
     <div>
         <!-- Mostrar mensajes de éxito -->
         @if (session()->has('success'))
-            <div class="bg-green-500 text-white px-4 py-2 rounded mb-4">
+            <div class="session-message bg-green-500 text-white px-4 py-2 rounded mb-4">
                 {{ session('success') }}
             </div>
         @endif
 
         <!-- Mostrar mensajes de error -->
         @if (session()->has('error'))
-            <div class="bg-red-500 text-white px-4 py-2 rounded mb-4">
+            <div class="session-message bg-red-500 text-white px-4 py-2 rounded mb-4">
                 {{ session('error') }}
             </div>
         @endif
     </div>
 
-@if ($modal)
+    @if ($modal)
         <div class="fixed inset-0 z-10 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
                 <h2 class="text-lg font-semibold mb-4">Compartir tarea</h2>
@@ -51,6 +51,7 @@
             </div>
         </div>
     @endif
+
     @if($showModalUnsshareTask)
         <div class="fixed inset-0 z-10 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
@@ -70,5 +71,29 @@
                 </div>
             </div>
         </div>
-        @endif
+    @endif
+    <script>
+        // Definir la función clearMessages en el contexto global
+        function clearMessages() {
+            const messages = document.querySelectorAll('.session-message');
+            messages.forEach(function (message) {
+                message.style.display = 'none';
+            });
+        }
+
+        document.addEventListener('livewire:load', function () {
+            // Escuchar el evento personalizado del navegador
+            window.addEventListener('clear-messages', () => {
+                console.log('Evento clear-messages recibido');
+                setTimeout(clearMessages, 3000); // Llamar a clearMessages después de 3 segundos
+            });
+
+            // Limpiar mensajes después de cargar la página
+            setTimeout(clearMessages, 3000);
+        });
+    </script>
+
+
+
+
 </div>

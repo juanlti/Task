@@ -8,9 +8,24 @@ use Livewire\Component;
 class Delete extends Component
 {
     public $taskId;
+    public $modalVisibleDeleteAll = false;
     public $modalVisible = false; // Estado del modal
-    protected $listeners = ['confirmDelete' => 'showModal'];
+    protected $listeners = ['confirmDelete' => 'showModal', 'deleteAllTask' => 'showModalDeleteAll'];
 
+    public function showModalDeleteAll()
+    {
+        $this->modalVisibleDeleteAll = true;
+    }
+
+    public function deleteAllTask()
+    {
+        // Eliminar todas las tareas
+        Task::query()->delete();
+        session()->flash('success', 'Todas las tareas han sido eliminadas.');
+        $this->reset('taskId');
+        $this->modalVisibleDeleteAll = false;
+        $this->dispatch('taskUpdated');
+    }
 
     public function showModal($taskId)
     {
@@ -23,15 +38,11 @@ class Delete extends Component
         if ($this->taskId) {
             Task::find($this->taskId)?->delete();
             $this->dispatch('taskUpdated');
+
             $this->closeModal(); // Cierra el modal
+            $this->reset('taskId');
         }
     }
-    public function closeModal()
-    {
-        $this->modalVisible = false;
-        $this->reset('taskId'); // Resetea el ID de la tarea
-    }
-
 
     public function render()
     {

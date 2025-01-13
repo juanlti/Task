@@ -12,24 +12,39 @@ class Share extends Component
     public $taskSelected; // Tarea seleccionada
     public $selectedUser = null; // Usuario seleccionado
     public $selectedPermission = 'view'; // Permiso seleccionado por defecto
+    public $showModalUnsshareTask=false;
     public $permission = [ // Lista de permisos
         'view' => 'Ver',
         'edit' => 'Editar',
         'delete' => 'Eliminar',
     ];
-    public $showModalUnsshareTask=false;
 
-    protected $listeners = ['shareTask' => 'showModal','unshareTask' => 'showModalUnsshareTask'];
+
+    protected $listeners = ['shareTask' => 'showModal','unShareTask' => 'showModalUnsshareTask'];
 
     public function showModalUnsshareTask(Task $task){
-        $showModalUnsshareTask=true;
+
+        $this->showModalUnsshareTask=true;
+        $this->taskSelected = $task;
+
 
     }
-    public function unShareTask(){
+    public function unShareTask()
+    {
+        // Obtengo el usuario registrado
+        $user = User::find(auth()->user()->id);
 
-        $user=$task::find(auth()->user()->id);
-        $user->sharedTasks()->detach($task);
-        $this->modal = true;
+        // Verifico si el usuario es el propietario de la tarea
+        if ($this->taskSelected->user_id === $user->id) {
+            // Desasocio la tarea de todos los usuarios con los que se ha compartido
+            $this->taskSelected->sharedWith()->detach();
+
+            $this->showModalUnsshareTask = false;
+            session()->flash('success', 'Tarea descompartida exitosamente con todos los usuarios.');
+        } else {
+            session()->flash('error', 'No tienes permiso para descompartir esta tarea.');
+        }
+        $this->dispatch('taskUpdated');
     }
     public function showModal(Task $task)
     {
@@ -38,21 +53,36 @@ class Share extends Component
     }
     public function shared()
     {
-        // Verifica si la tarea y el usuario son válidos
-        if ($this->taskSelected && $this->selectedUser) {
-            $user = User::find($this->selectedUser);
+        try {
+            /*
+            // Validar datos requeridos
+            $this->validate([
+                'taskSelected' => 'required|exists:tasks,id',
+                'selectedUser' => 'required|exists:users,id',
+                'selectedPermission' => 'required|in:edit,view',
+            ]);
+            */
 
-            // Adjunta la tarea con el permiso seleccionado
+            // Encuentra al usuario y adjunta la tarea con el permiso seleccionado
+            $user = User::findOrFail($this->selectedUser);
+
             $this->taskSelected->sharedWith()->attach($user, [
                 'permission' => $this->selectedPermission,
             ]);
 
+            // Mensaje de éxito
             session()->flash('success', 'Tarea compartida exitosamente.');
-            $this->modal = false; // Oculta el modal después de compartir
-        } else {
-            session()->flash('error', 'Por favor selecciona un usuario y un permiso válido.');
-        }
+            $this->dispatch('clear-messages');
+            // Cierra el modal
+            $this->reset(['modal', 'selectedUser', 'selectedPermission', 'taskSelected']);
 
+
+            // Notifica a otros componentes
+            $this->dispatch('taskUpdated');
+        } catch (\Exception $e) {
+            // Maneja errores y muestra un mensaje adecuado
+            session()->flash('error', 'Ocurrió un error al compartir la tarea: ' . $e->getMessage());
+        }
     }
 
     public function render()

@@ -22,6 +22,20 @@
                         wire:click.prevent="addTask">Agregar Tarea
                 </button>
             </div>
+            <div>
+                <button
+                    class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400  mr-2"
+                    wire:click.prevent="recoverAllTasks">
+                    Recuperar  todas las tareas
+                </button>
+            </div>
+            <div>
+                <button
+                    class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400  mr-2"
+                    wire:click.prevent="deleteAllTask">
+                    Borrar todas las tareas (inclusive las pendientes)
+                </button>
+            </div>
         </div>
         <div class="overflow-hidden rounded-lg border">
             <div class="overflow-x-auto">
@@ -70,9 +84,11 @@
 
                                         <button
                                                 class="bg-red-800 text-white px-4 py-2 rounded-md hover:bg-red-400  mr-2"
-                                                wire:click.prevent="confirmDelete({{ $task->id }})">
+                                                wire:click.prevent="unSharedTask({{ $task->id }})">
                                                 Descompartir
                                             </button>
+
+
                                         @endif
                                         @if ( (isset($task->pivot) && $task->pivot->permission == 'edit') || auth()->user()->id == $task->user_id)
 
