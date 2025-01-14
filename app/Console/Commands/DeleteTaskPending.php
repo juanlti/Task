@@ -35,22 +35,7 @@ class DeleteTaskPending extends Command
 
         //Task::withTrashed() obtenemos los registros que fueron eliminado de manera soft delete
         //whereNotNull('deleted_at') obtenemos los registros que no son nulos, tienen una fecha de borrado
-        $tasks = Task::withTrashed()->whereNotNull('deleted_at')->where('deleted_at','<', now()->subDays(5))->get();
-        //dump(now()->toDateTimeString());
-       // dump(DB::table('tasks')->count());
-       // $task = Task::withTrashed()->select('deleted_at')->first();
-
-
-
-        dd($tasks->toArray());
+        $tasks = Task::withTrashed()->whereNotNull('deleted_at')->where('deleted_at', '<', now()->subDays(5))->get();
         $tasks->each->forceDelete();
-
-
-        /*
-                table(
-                    headers: ['Name', 'Email'],
-                    rows: User::all(['name', 'email'])->toArray()
-                );
-        */
     }
 }
