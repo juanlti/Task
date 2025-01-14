@@ -8,10 +8,12 @@ use Livewire\Component;
 class TaskComponent extends Component
 {
     public $tasks;
+
     public $title;
+
     public $description;
     public $modal = false;
-    protected $listeners = ['taskUpdated' => 'loadTasks', 'taskAdded' => 'loadTasks'];
+    protected $listeners = ['taskUpdated' => 'loadTasks', 'taskAdded' => 'loadTasks','taskUpdated' => 'loadTasks'];
 
     public function mount()
     {
@@ -24,19 +26,40 @@ class TaskComponent extends Component
         $this->dispatch('createTask');
 
     }
+    public function recoverAllTasks()
+    {
+
+        // Recuperar todas las tareas
+        //buscamos el usuario logeado
+        $user = auth()->user();
+        //recuperamos todas las tareas eliminadas
+        $myTask=$user->tasks()->restore();
+        //recuperamos todas las tareas compartidas eliminadas
+        $shareTask=$user->sharedTasks()->restore();
+        //recargamos las tareas
+        //$this->tasks = $myTask->merge($shareTask);
+        $this->loadTasks();
+        session()->flash('success', 'Todas las tareas eliminadas han sido recuperadas.');
+
+
+
+
+
+    }
 
     public function loadTasks()
     {
-        $this->tasks = Task::where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+        $user = auth()->user();
+        $myTask = $user->tasks;
+        $sharedTask = $user->sharedTasks;
+        $this->tasks = $myTask->merge($sharedTask);
     }
 
-    public function render()
-    {
-        return view('livewire.task.component');
-    }
 
+    public function deleteAllTask(){
+        $this->dispatch('deleteAllTask');
+    }
     public function confirmDelete($taskId)
     {
         $this->dispatch('confirmDelete', $taskId);
@@ -46,5 +69,32 @@ class TaskComponent extends Component
     public function editTask($taskId)
     {
         $this->dispatch('editTask', $taskId);
+    }
+
+    public function sharedTask($taskId)
+    {
+
+        $this->dispatch('shareTask', $taskId);
+    }
+    public function unSharedTask($taskId)
+    {
+
+        $this->dispatch('unShareTask', $taskId);
+    }
+    public function markAsCompleted($taskId)
+    {
+        $task = Task::find($taskId);
+        if ($task) {
+            $task->is_completed = true;
+            $task->save();
+            session()->flash('success', 'La tarea ha sido marcada como completada.');
+        } else {
+            session()->flash('error', 'La tarea no pudo ser encontrada.');
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.task.component');
     }
 }

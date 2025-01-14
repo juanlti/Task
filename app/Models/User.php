@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class User extends Authenticatable
 {
@@ -51,5 +53,9 @@ class User extends Authenticatable
     // users (1) ---->  task (m)
     public function tasks(): HasMany{
         return $this->hasMany(Task::class);
+    }
+    // relacion inversa de los usuarios que comparten tareas
+    public function sharedTasks(): BelongsToMany{
+        return $this->belongsToMany(Task::class,'task_user')->withPivot('permission');
     }
 }
