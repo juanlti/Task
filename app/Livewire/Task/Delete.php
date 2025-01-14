@@ -38,8 +38,6 @@ class Delete extends Component
         if ($this->taskId) {
             Task::find($this->taskId)?->delete();
             $this->dispatch('taskUpdated');
-
-            $this->closeModal(); // Cierra el modal
             $this->reset('taskId');
         }
     }
